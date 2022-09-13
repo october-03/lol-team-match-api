@@ -183,4 +183,13 @@ router.patch('/del-member/:code', findTeamCode, async (req, res)=>{
   }
 })
 
+router.delete('/del-team/:uniqueCode', findUniqueCode, async (req,res)=>{
+  try {
+    await res.team.remove();
+    res.json({message: 'Deleted team'});
+  } catch(err) {
+    res.status(500).json({message: err.message});
+  }
+})
+
 module.exports = router
