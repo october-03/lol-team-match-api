@@ -66,18 +66,33 @@ router.patch('/add-member/:code', findTeamCode, async (req, res)=>{
 
   switch (position) {
     case 'top':
+      if(res.team.top){
+        return res.status(200).json({message: 'Position is full'});
+      }
       res.team.top = req.body;
       break;
     case 'jg':
+      if(res.team.jg){
+        return res.status(200).json({message: 'Position is full'});
+      }
       res.team.jg = req.body;
       break;
     case 'mid':
+      if(res.team.mid){
+        return res.status(200).json({message: 'Position is full'});
+      }
       res.team.mid = req.body;
       break;
     case 'adc':
+      if(res.team.adc){
+        return res.status(200).json({message: 'Position is full'});
+      }
       res.team.adc = req.body;
       break;
     case 'sup':
+      if(res.team.sup){
+        return res.status(200).json({message: 'Position is full'});
+      }
       res.team.sup = req.body;
       break;
     default:
