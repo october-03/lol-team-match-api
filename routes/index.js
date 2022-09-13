@@ -42,6 +42,15 @@ router.get('/', async (req, res)=>{
   }
 })
 
+router.get('/team/:uniqueCode', findUniqueCode ,async (req, res)=>{
+  // res.send("test get complete");
+  try {
+    res.json(res.team);
+  } catch(err) {
+    res.status(500).json({message: err.message});
+  }
+})
+
 router.post('/create-team', async (req, res)=>{
   const team = new Team({
     name: req.body.name,
