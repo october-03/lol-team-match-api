@@ -66,47 +66,18 @@ router.post('/create-team', async (req, res)=>{
   }
 })
 
-router.patch('/add-member/:code', findTeamCode, async (req, res)=>{
+router.patch('/add-member/:uniqueCode', findUniqueCode, async (req, res)=>{
   let position = req.body.position;
   let {isFull} = res.team;
   if(isFull){
     return res.status(200).json({message: 'Team is full'});
   }
 
-  switch (position) {
-    case 'top':
-      if(res.team.top){
-        return res.status(200).json({message: 'Position is full'});
-      }
-      res.team.top = req.body;
-      break;
-    case 'jg':
-      if(res.team.jg){
-        return res.status(200).json({message: 'Position is full'});
-      }
-      res.team.jg = req.body;
-      break;
-    case 'mid':
-      if(res.team.mid){
-        return res.status(200).json({message: 'Position is full'});
-      }
-      res.team.mid = req.body;
-      break;
-    case 'adc':
-      if(res.team.adc){
-        return res.status(200).json({message: 'Position is full'});
-      }
-      res.team.adc = req.body;
-      break;
-    case 'sup':
-      if(res.team.sup){
-        return res.status(200).json({message: 'Position is full'});
-      }
-      res.team.sup = req.body;
-      break;
-    default:
-      return res.status(400).json({message: 'Invalid position'});
+  if(res.team[position]){
+    return res.status(200).json({message: 'Position is full'});
   }
+
+  res.team[position] = req.body;
 
   let {top, jg, mid, adc, sup, type} = res.team;
 
@@ -137,46 +108,13 @@ router.patch('/add-member/:code', findTeamCode, async (req, res)=>{
   }
 })
 
-router.patch('/del-member/:code', findTeamCode, async (req, res)=>{
+router.patch('/del-member/:uniqueCode', findUniqueCode, async (req, res)=>{
   let position = req.body.position;
-  switch (position) {
-    case 'top':
-      if(res.team.top.name === req.body.name && res.team.top.password === req.body.password) {
-        res.team.top = null;
-      } else {
-        return res.status(400).json({message: '정보가 일치하지 않습니다.'});
-      }
-      break;
-    case 'jg':
-      if(res.team.jg.name === req.body.name && res.team.jg.password === req.body.password) {
-        res.team.jg = null;
-      } else {
-        return res.status(400).json({message: '정보가 일치하지 않습니다.'});
-      }
-      break;
-    case 'mid':
-      if(res.team.mid.name === req.body.name && res.team.mid.password === req.body.password) {
-        res.team.mid = null;
-      } else {
-        return res.status(400).json({message: '정보가 일치하지 않습니다.'});
-      }
-      break;
-    case 'adc':
-      if(res.team.adc.name === req.body.name && res.team.adc.password === req.body.password) {
-        res.team.adc = null;
-      } else {
-        return res.status(400).json({message: '정보가 일치하지 않습니다.'});
-      }
-      break;
-    case 'sup':
-      if(res.team.sup.name === req.body.name && res.team.sup.password === req.body.password) {
-        res.team.sup = null;
-      } else {
-        return res.status(400).json({message: '정보가 일치하지 않습니다.'});
-      }
-      break;
-    default:
-      return res.status(400).json({message: 'Invalid position'});
+
+  if(res.team[position].name === req.body.name && res.team[position].password === req.body.password) {
+    res.team[position] = null;
+  } else {
+    return res.status(400).json({message: '정보가 일치하지 않습니다.'});
   }
 
   let {top, jg, mid, adc, sup, type} = res.team;
@@ -207,7 +145,7 @@ router.patch('/del-member/:code', findTeamCode, async (req, res)=>{
   }
 })
 
-router.delete('/del-team/:uniqueCode', findUniqueCode, async (req,res)=>{
+router.delete('/del-team/:code', findTeamCode, async (req,res)=>{
   try {
     await res.team.remove();
     res.json({message: 'Deleted team'});
