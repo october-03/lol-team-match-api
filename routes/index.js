@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const Team = require('./models/teamModel');
+const { nanoid } = require('nanoid');
 
 async function findUniqueCode(req, res, next) {
   let team;
@@ -56,6 +57,7 @@ router.post('/create-team', async (req, res)=>{
     name: req.body.name,
     code: req.body.code,
     type: req.body.type,
+    uniqueCode: nanoid(8)
   });
 
   try {

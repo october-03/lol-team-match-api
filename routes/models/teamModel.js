@@ -23,7 +23,7 @@ const teamSchema = new mongoose.Schema({
     type: String, required: true
   },
   uniqueCode: {
-    type: String, required: true, default: '0000',
+    type: String, required: true, index: {unique: true}
   },
   top: {type: userSchema, default: null},
   jg: {type: userSchema, default: null},
